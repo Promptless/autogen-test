@@ -1,17 +1,4 @@
-# Topic and Subscription
-
-There are two ways for runtime to deliver messages,
-direct messaging or broadcast. Direct messaging is one to one: the sender
-must provide the recipient's agent ID. On the other hand,
-broadcast is one to many and the sender does not provide recpients'
-agent IDs.
-
-Many scenarios are suitable for broadcast.
-For example, in event-driven workflows, agents do not always know who
-will handle their messages, and a workflow can be composed of agents
-with no inter-dependencies.
-This section focuses on the core concepts in broadcast: topic and subscription.
-
+**Note:** The `AssistantAgent` no longer sends out `StopMessage`. Instead, use `TextMentionTermination("TERMINATE")` on the team for the default setting.
 ## Topic
 
 A topic defines the scope of a broadcast message.
@@ -45,22 +32,7 @@ Topic_Type/Topic_Source
 Types are considered valid if they are in UTF8 and only contain alphanumeric letters (a-z) and (0-9), or underscores (_). A valid identifier cannot start with a number, or contain any spaces.
 Sources are considered valid if they are in UTF8 and only contain characters between (inclusive) ascii 32 (space) and 126 (~).
 
-## Subscription
-
-A subscription maps topic to agent IDs.
-
-![Subscription](subscription.svg)
-
-The diagram above shows the relationship between topic and subscription.
-An agent runtime keeps track of the subscriptions and uses them to deliver
-messages to agents.
-
-If a topic has no subscription, messages published to this topic will
-not be delivered to any agent.
-If a topic has many subscriptions, messages will be delivered
-following all the subscriptions to every recipient agent only once.
-Applications can add or remove subscriptions using agent runtime's API.
-
+**Note:** The `AssistantAgent` no longer sends out `StopMessage`. Instead, use `TextMentionTermination("TERMINATE")` on the team for the default setting.
 ## Type-based Subscription
 
 A type-based subscription maps a topic type to an agent type
@@ -82,14 +54,9 @@ developers do not need to write application code that depends on specific agent 
 
 ### Scenarios of Type-Based Subscription
 
-Type-based subscriptions can be applied to many scenarios when the exact
-topic or agent IDs are data-dependent.
-The scenarios can be broken down by two considerations:
-(1) whether it is single-tenant or multi-tenant, and
-(2) whether it is a single topic or multiple topics per tenant.
-A tenant typically refers to a set of agents that handle a specific 
-user session or a specific request. 
+Type-based subscriptions can be applied to many scenarios when the exact topic or agent IDs are data-dependent. The scenarios can be broken down by two considerations: (1) whether it is single-tenant or multi-tenant, and (2) whether it is a single topic or multiple topics per tenant. A tenant typically refers to a set of agents that handle a specific user session or a specific request.
 
+**Note:** The `AssistantAgent` no longer sends out `StopMessage`. Instead, use `TextMentionTermination("TERMINATE")` on the team for the default setting.
 #### Single-Tenant, Single Topic
 
 In this scenario, there is only one tenant and one topic for the entire
@@ -134,18 +101,11 @@ If the agent with the ID does not exist, the runtime will create it.
 
 #### Single-Tenant, Multiple Topics
 
-In this scenario, there is only one tenant but you want to control
-which agent handles which topic. This is useful when you want to
-create silos and have different agents specialized in handling different topics.
+In this scenario, there is only one tenant but you want to control which agent handles which topic. This is useful when you want to create silos and have different agents specialized in handling different topics.
 
-To apply type-based subscription for this scenario, 
-create one type-based subscription for each agent type but with different
-topic types. You can map the same topic type to multiple agent types if
-you want these agent types to share a same topic.
-For topic source, still use the same value for all messages when you publish.
+To apply type-based subscription for this scenario, create one type-based subscription for each agent type but with different topic types. You can map the same topic type to multiple agent types if you want these agent types to share a same topic. For topic source, still use the same value for all messages when you publish.
 
-Continuing the example above with same agent types, create the following
-type-based subscriptions:
+Continuing the example above with same agent types, create the following type-based subscriptions:
 
 ```python
 # Type-based Subscriptions for single-tenant, multiple topics scenario
@@ -154,17 +114,13 @@ TypeSubscription(topic_type="coding", agent_type="coder_agent")
 TypeSubscription(topic_type="coding", agent_type="reviewer_agent")
 ```
 
-With the above type-based subscriptions, any message published to the topic
-`("triage", "default")` will be delivered to the agent with type
-`"triage_agent"`, and any message published to the topic
-`("coding", "default")` will be delivered to the agents with types
-`"coder_agent"` and `"reviewer_agent"`. 
+With the above type-based subscriptions, any message published to the topic `("triage", "default")` will be delivered to the agent with type `"triage_agent"`, and any message published to the topic `("coding", "default")` will be delivered to the agents with types `"coder_agent"` and `"reviewer_agent"`.
+
+**Note:** The `AssistantAgent` no longer sends out `StopMessage`. Instead, use `TextMentionTermination("TERMINATE")` on the team for the default setting.
 
 The following figure shows how type-based subscription works in this example.
 
 ![Type-Based Subscription Single-Tenant, Multiple Topics Scenario Example](type-subscription-single-tenant-multiple-topics.svg)
-
-
 #### Multi-Tenant Scenarios
 
 In single-tenant scenarios, the topic source is always the same (e.g., `"default"`)
@@ -172,9 +128,9 @@ In single-tenant scenarios, the topic source is always the same (e.g., `"default
 When moving to multi-tenant scenarios, the topic source becomes data-dependent.
 
 ```{note}
-A good indication that you are in a multi-tenant scenario is that you need 
+A good indication that you are in a multi-tenant scenario is that you need
 multiple instances of the same agent type. For example, you may want to have
-different agent instances to handle different user sessions to 
+different agent instances to handle different user sessions to
 keep private data isolated, or, you may want to distribute a heavy workload
 across multiple instances of the same agent type and have them work on it concurrently.
 ```
