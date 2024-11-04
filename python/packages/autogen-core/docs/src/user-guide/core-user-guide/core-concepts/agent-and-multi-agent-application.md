@@ -26,3 +26,7 @@ In multi-agent applications, agents may:
 Each agent is a self-contained unit that can be developed, tested, and deployed independently. This modular design allows agents to be reused across different scenarios and composed into more complex systems.
 
 Agents are inherently **composable**: simple agents can be combined to form complex, adaptable applications, where each agent contributes a specific function or service to the overall system.
+
+## Recent Changes in Agent Behavior
+
+Recent updates have changed how agents handle termination messages. The `AssistantAgent` no longer sends out `StopMessage`. Instead, the default setting now uses `TextMentionTermination("TERMINATE")` on the team. This change affects how agents signal the end of their operations and should be considered when designing or updating multi-agent applications.

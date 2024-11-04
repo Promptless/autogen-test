@@ -131,7 +131,7 @@ The following figure shows how type-based subscription works in this example.
 
 If the agent with the ID does not exist, the runtime will create it.
 
-
+**Note:** The `AssistantAgent` no longer sends out `StopMessage`. Instead, use `TextMentionTermination("TERMINATE")` on the team for the default setting.
 #### Single-Tenant, Multiple Topics
 
 In this scenario, there is only one tenant but you want to control
@@ -172,9 +172,9 @@ In single-tenant scenarios, the topic source is always the same (e.g., `"default
 When moving to multi-tenant scenarios, the topic source becomes data-dependent.
 
 ```{note}
-A good indication that you are in a multi-tenant scenario is that you need 
+A good indication that you are in a multi-tenant scenario is that you need
 multiple instances of the same agent type. For example, you may want to have
-different agent instances to handle different user sessions to 
+different agent instances to handle different user sessions to
 keep private data isolated, or, you may want to distribute a heavy workload
 across multiple instances of the same agent type and have them work on it concurrently.
 ```
