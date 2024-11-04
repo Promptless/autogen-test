@@ -1,3 +1,4 @@
+```md
 ---
 myst:
   html_meta:
@@ -10,6 +11,13 @@ myst:
 AgentChat is a high-level package for building multi-agent applications built on top of the [ `autogen-core`](../core-user-guide/index.md) package. For beginner users, AgentChat is the recommended starting point. For advanced users, [ `autogen-core`](../core-user-guide/index.md) provides more flexibility and control over the underlying components.
 
 AgentChat aims to provide intuitive defaults, such as **Agents** with preset behaviors and **Teams** with predefined communication protocols, to simplify building multi-agent applications.
+
+## New Features
+
+AgentChat now supports asynchronous streaming capabilities, allowing for more efficient processing of tasks. This includes:
+
+- **AsyncGenerator for Message Streaming**: Stream messages asynchronously using the new `run_stream` and `on_messages_stream` methods.
+- **Enhanced Examples**: Updated examples to demonstrate the use of streaming in various scenarios.
 
 ```{include} warning.md
 
@@ -56,4 +64,5 @@ installation
 quickstart
 tutorial/index
 examples/index
+```
 ```
