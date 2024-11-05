@@ -15,25 +15,25 @@ internal sealed class AgentContext(AgentId agentId, IAgentWorkerRuntime runtime,
     public ILogger Logger { get; } = logger;
     public IAgentBase? AgentInstance { get; set; }
     public DistributedContextPropagator DistributedContextPropagator { get; } = distributedContextPropagator;
-    public async ValueTask SendResponseAsync(RpcRequest request, RpcResponse response, CancellationToken cancellationToken)
+    public async ValueTask SendResponseAsync(RpcRequest request, RpcResponse response)
     {
         response.RequestId = request.RequestId;
-        await _runtime.SendResponse(response, cancellationToken).ConfigureAwait(false);
+        await _runtime.SendResponse(response);
     }
-    public async ValueTask SendRequestAsync(IAgentBase agent, RpcRequest request, CancellationToken cancellationToken)
+    public async ValueTask SendRequestAsync(IAgentBase agent, RpcRequest request)
     {
-        await _runtime.SendRequest(agent, request, cancellationToken).ConfigureAwait(false);
+        await _runtime.SendRequest(agent, request).ConfigureAwait(false);
     }
-    public async ValueTask PublishEventAsync(CloudEvent @event, CancellationToken cancellationToken)
+    public async ValueTask PublishEventAsync(CloudEvent @event)
     {
-        await _runtime.PublishEvent(@event, cancellationToken).ConfigureAwait(false);
+        await _runtime.PublishEvent(@event).ConfigureAwait(false);
     }
-    public async ValueTask Store(AgentState value, CancellationToken cancellationToken)
+    public async ValueTask Store(AgentState value)
     {
-        await _runtime.Store(value, cancellationToken).ConfigureAwait(false);
+        await _runtime.Store(value).ConfigureAwait(false);
     }
-    public ValueTask<AgentState> Read(AgentId agentId, CancellationToken cancellationToken)
+    public ValueTask<AgentState> Read(AgentId agentId)
     {
-        return _runtime.Read(agentId, cancellationToken);
+        return _runtime.Read(agentId);
     }
 }

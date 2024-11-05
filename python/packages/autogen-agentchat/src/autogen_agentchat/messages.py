@@ -1,7 +1,7 @@
 from typing import List
 
 from autogen_core.components import FunctionCall, Image
-from autogen_core.components.models import FunctionExecutionResult, RequestUsage
+from autogen_core.components.models import FunctionExecutionResult
 from pydantic import BaseModel
 
 
@@ -10,9 +10,6 @@ class BaseMessage(BaseModel):
 
     source: str
     """The name of the agent that sent this message."""
-
-    models_usage: RequestUsage | None = None
-    """The model client usage incurred when producing this message."""
 
 
 class TextMessage(BaseMessage):
@@ -60,14 +57,14 @@ class ToolCallMessage(BaseMessage):
     """The tool calls."""
 
 
-class ToolCallResultMessage(BaseMessage):
+class ToolCallResultMessages(BaseMessage):
     """A message signaling the results of tool calls."""
 
     content: List[FunctionExecutionResult]
     """The tool call results."""
 
 
-InnerMessage = ToolCallMessage | ToolCallResultMessage
+InnerMessage = ToolCallMessage | ToolCallResultMessages
 """Messages for intra-agent monologues."""
 
 
@@ -83,6 +80,6 @@ __all__ = [
     "HandoffMessage",
     "ResetMessage",
     "ToolCallMessage",
-    "ToolCallResultMessage",
+    "ToolCallResultMessages",
     "ChatMessage",
 ]
