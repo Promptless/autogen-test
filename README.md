@@ -101,7 +101,7 @@ We look forward to your contributions!
 First install the packages:
 
 ```bash
-pip install 'autogen-agentchat==0.4.0.dev3' 'autogen-ext[docker]==0.4.0.dev3'
+pip install autogen-agentchat==0.4.0.dev2 autogen-ext==0.4.0.dev2
 ```
 
 The following code uses code execution, you need to have [Docker installed](https://docs.docker.com/engine/install/)
@@ -109,11 +109,17 @@ and running on your machine.
 
 ```python
 import asyncio
+import logging
+from autogen_agentchat import EVENT_LOGGER_NAME
+from autogen_agentchat.agents import CodeExecutorAgent, CodingAssistantAgent
+from autogen_agentchat.logging import ConsoleLogHandler
+from autogen_agentchat.teams import RoundRobinGroupChat, StopMessageTermination
 from autogen_ext.code_executor.docker_executor import DockerCommandLineCodeExecutor
 from autogen_ext.models import OpenAIChatCompletionClient
-from autogen_agentchat.agents import CodeExecutorAgent, CodingAssistantAgent
-from autogen_agentchat.teams import RoundRobinGroupChat
-from autogen_agentchat.task import TextMentionTermination
+
+logger = logging.getLogger(EVENT_LOGGER_NAME)
+logger.addHandler(ConsoleLogHandler())
+logger.setLevel(logging.INFO)
 
 async def main() -> None:
     async with DockerCommandLineCodeExecutor(work_dir="coding") as code_executor:
@@ -121,13 +127,11 @@ async def main() -> None:
         coding_assistant_agent = CodingAssistantAgent(
             "coding_assistant", model_client=OpenAIChatCompletionClient(model="gpt-4o", api_key="YOUR_API_KEY")
         )
-        termination = TextMentionTermination("TERMINATE")
-        group_chat = RoundRobinGroupChat([coding_assistant_agent, code_executor_agent], termination_condition=termination)
-        stream = group_chat.run_stream(
-            "Create a plot of NVDIA and TSLA stock returns YTD from 2024-01-01 and save it to 'nvidia_tesla_2024_ytd.png'."
+        group_chat = RoundRobinGroupChat([coding_assistant_agent, code_executor_agent])
+        result = await group_chat.run(
+            task="Create a plot of NVDIA and TSLA stock returns YTD from 2024-01-01 and save it to 'nvidia_tesla_2024_ytd.png'.",
+            termination_condition=StopMessageTermination(),
         )
-        async for message in stream:
-            print(message)
 
 asyncio.run(main())
 ```

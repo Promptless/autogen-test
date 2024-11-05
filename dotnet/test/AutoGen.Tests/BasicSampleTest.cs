@@ -34,8 +34,7 @@ public class BasicSampleTest
     [ApiKeyFact("OPENAI_API_KEY")]
     public async Task AgentFunctionCallTestAsync()
     {
-        await Example03_Agent_FunctionCall.ToolCallWithSourceGenerator();
-        await Example03_Agent_FunctionCall.ToolCallWithMEAITools();
+        await Example03_Agent_FunctionCall.RunAsync();
     }
 
     [ApiKeyFact("MISTRAL_API_KEY")]
